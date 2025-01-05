@@ -296,6 +296,7 @@ class SmsController extends FormController
                         // Call the handleFileUpload method
                         $uploadResult = $this->handleFileUpload($upload_file, $request);
 
+                        // If the file is uploaded successfully
                         if ($uploadResult['success']) {
                             // If the message type is WhatsApp, save the public URL to the entity
                             if ($entity->getMessageType() == 'WhatsApp') {
@@ -308,7 +309,7 @@ class SmsController extends FormController
 
                     // form is valid so process the data
                     $model->saveEntity($entity);
-
+                    
                     $this->addFlashMessage(
                         'mautic.core.notice.created',
                         [
@@ -324,6 +325,7 @@ class SmsController extends FormController
                         ]
                     );
 
+                    //Redirect to the view page if the save button is clicked
                     if ($this->getFormButton($form, ['buttons', 'save'])->isClicked()) {
                         $viewParameters = [
                             'objectAction' => 'view',
@@ -343,7 +345,7 @@ class SmsController extends FormController
                 //clear any modified content
                 $session->remove('mautic.sms.'.$entity->getId().'.content');
             }
-
+            
             $passthrough = [
                 'activeLink'    => 'mautic_sms_index',
                 'mauticContent' => 'sms',
@@ -362,7 +364,7 @@ class SmsController extends FormController
                     ]
                 );
             }
-
+            //Redirect to the view page if the save button is clicked
             if ($cancelled || ($valid && $this->getFormButton($form, ['buttons', 'save'])->isClicked())) {
                 return $this->postActionRedirect(
                     [
@@ -415,6 +417,7 @@ class SmsController extends FormController
         // set the return URL
         $returnUrl = $this->generateUrl('mautic_sms_index', ['page' => $page]);
 
+        // set the post action variables
         $postActionVars = [
             'returnUrl'       => $returnUrl,
             'viewParameters'  => ['page' => $page],
