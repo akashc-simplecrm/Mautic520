@@ -268,7 +268,6 @@ class SmsController extends FormController
             return $this->accessDenied();
         }
 
-        //set the page we came from
         $page   = $session->get('mautic.sms.page', 1);
         $action = $this->generateUrl('mautic_sms_action', ['objectAction' => 'new']);
         $sms          = $request->request->get('sms') ?? [];
@@ -805,6 +804,7 @@ class SmsController extends FormController
      */
     private function handleFileUpload($file, Request $request)
     {
+        // Allowed file types 
         $allowedTypes = [
             // Image types
             'image/jpeg', 'image/jpg', 'image/png', 'image/gif',
@@ -825,6 +825,7 @@ class SmsController extends FormController
             'application/vnd.oasis.opendocument.text', 'application/vnd.oasis.opendocument.spreadsheet', // OpenDocument
         ];
         
+        //maximum file size
         $maxSize = 5 * 1024 * 1024; // 5MB
         
         // Check if the MIME type is valid
@@ -837,6 +838,7 @@ class SmsController extends FormController
             return ['success' => false, 'error' => 'File size exceeds the 5MB limit.'];
         }
 
+        // Determine upload directory based on file type
         if (in_array($file->getMimeType(), $allowedTypes) && $file->getSize() <= $maxSize) {
 
 
@@ -853,7 +855,10 @@ class SmsController extends FormController
                 $uploadDir = 'media/files/'; // Default for other file types
             }
 
+            // Generate a unique file name
             $fileName = uniqid() . '.' . $file->guessExtension();
+
+            // Generate the full file path
             $filePath = $uploadDir . $fileName;
 
             // Move the file to the upload directory
