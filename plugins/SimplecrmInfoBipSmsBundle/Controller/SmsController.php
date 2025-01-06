@@ -680,6 +680,7 @@ class SmsController extends FormController
         $returnUrl = $this->generateUrl('mautic_sms_index', ['page' => $page]);
         $flashes   = [];
 
+        //set the post action variables
         $postActionVars = [
             'returnUrl'       => $returnUrl,
             'viewParameters'  => ['page' => $page],
